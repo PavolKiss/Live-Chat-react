@@ -9,6 +9,7 @@ export const signin = async (email, password) => {
     return response;
   } catch (error) {
     console.log(error);
+    throw error;
   }
 };
 
@@ -20,7 +21,9 @@ export const signUp = async (email, password, userName) => {
     );
     const { user } = response;
     await user.updateProfile({
-      displayName: userName
+      displayName: userName,
+      photoURL:
+        "https://firebasestorage.googleapis.com/v0/b/livechat-12a55.appspot.com/o/userAvatar%2Fdefault.png?alt=media&token=266c04d2-273f-4173-975e-f940fd7cec0a"
     });
     return response;
   } catch (error) {

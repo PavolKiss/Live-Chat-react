@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { signUp } from "../../api/auth";
+import { StyledInput } from "../../components/StyledInput";
+import { StyledButton } from "../../components/StyledButton";
+import { Wrapper } from "../LoginPage/styles";
 
 export const RegisterPage = () => {
   const [email, setEmail] = useState("");
@@ -20,24 +23,28 @@ export const RegisterPage = () => {
 
   return (
     <form onSubmit={signup}>
-      <div>
+      <Wrapper>
         <div>
-          <input type="text" placeholder="name" onChange={handleName} />
+          <StyledInput type="text" placeholder="Name" onChange={handleName} />
         </div>
         <div>
-          <input type="email" placeholder="email" onChange={handleEmail} />
+          <StyledInput
+            type="email"
+            placeholder="Email"
+            onChange={handleEmail}
+          />
         </div>
         <div>
-          <input
+          <StyledInput
             type="password"
-            placeholder="password"
+            placeholder="Password"
             onChange={handlePassword}
           />
         </div>
         <div>
-          <button>Register</button>
+          <StyledButton>Register</StyledButton>
         </div>
-      </div>
+      </Wrapper>
     </form>
   );
 };

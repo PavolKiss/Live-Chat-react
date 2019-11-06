@@ -15,11 +15,12 @@ const logout = () => {
 
 const mainLinks = {
   home: { to: "/", title: "Home" },
+  chat: { to: "chat/general", title: "Home" },
   contact: { to: "contact", title: "Contact Us" },
   signin: { to: "signin", title: "Sign In" },
   adminpanel: { to: "adminpanel", title: "Admin Panel" },
   account: { to: "account", title: "Account" },
-  signout: { to: "#", title: "Sign Out", onClick: logout }
+  signout: { to: "/", title: "Sign Out", onClick: logout }
 };
 
 const defaultLinks = [mainLinks.home, mainLinks.contact, mainLinks.signin];
@@ -29,15 +30,14 @@ export const Header = () => {
 
   useEffect(() => {
     const unsubscribe = firebase.auth.onAuthStateChanged(async user => {
-      const isAdmin = !!user
+      const isAdmin = user
         ? (await user.getIdTokenResult()).claims.admin
         : false;
 
-      console.log(`IS ADMIN ${isAdmin}`);
       if (user) {
         if (isAdmin) {
           setLinks([
-            mainLinks.home,
+            mainLinks.chat,
             mainLinks.adminpanel,
             mainLinks.contact,
             mainLinks.account,
@@ -45,7 +45,7 @@ export const Header = () => {
           ]);
         } else {
           setLinks([
-            mainLinks.home,
+            mainLinks.chat,
             mainLinks.contact,
             mainLinks.account,
             mainLinks.signout

@@ -7,6 +7,17 @@ import {
   HomePageImage,
   HomePageButton
 } from "./styles";
+import * as firebase from "../../firebase/index";
+import { navigate } from "@reach/router";
+
+const unsubscribe = firebase.auth.onAuthStateChanged(user => {
+  if (user && navigate() !== navigate("/chat/general")) {
+    navigate("/chat/general");
+  } else {
+    navigate("/");
+  }
+  return () => unsubscribe();
+});
 
 export const Homepage = () => {
   return (

@@ -35,7 +35,7 @@ export const StyledLink = styled(Link)`
   text-transform: uppercase;
   text-decoration: none;
   &:hover {
-    transition: color 0.3s;
+    transition: color 0.2s;
     color: #3a7bd5;
   }
 `;

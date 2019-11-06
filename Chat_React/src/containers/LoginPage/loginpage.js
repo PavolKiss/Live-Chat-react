@@ -1,5 +1,9 @@
 import React, { useState } from "react";
 import { signin } from "../../api/auth";
+import { Wrapper } from "./styles";
+import { Button } from "../../components/StyledButton/styles";
+import { StyledInput } from "../../components/StyledInput";
+import { navigate } from "@reach/router";
 
 export const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -11,31 +15,35 @@ export const LoginPage = () => {
 
   const signIn = async e => {
     e.preventDefault();
-    const response = await signin(email, password);
-    console.log(response);
+    try {
+      const response = await signin(email, password);
+      console.log(response);
+      navigate("/chat/general");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
     <form onSubmit={signIn}>
-      <div>
+      <Wrapper>
+        <h1>Sign In</h1>
         <div>
-          <input
+          <StyledInput
             type="email"
-            name="email"
-            placeholder="email"
             onChange={handleEmail}
-          ></input>
+            placeholder="Email"
+          />
         </div>
         <div>
-          <input
+          <StyledInput
             type="password"
-            name="password"
-            placeholder="password"
             onChange={handlePassword}
-          ></input>
+            placeholder="Password"
+          />
         </div>
-        <button>Sign In</button>
-      </div>
+        <Button>Sign In</Button>
+      </Wrapper>
     </form>
   );
 };
