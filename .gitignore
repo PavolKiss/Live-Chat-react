@@ -5,8 +5,9 @@ node_modules/
 logs
 *.log
 npm-debug.log*
-src/firebase
+.vscode
 
+.env
 # Optional npm cache directory
 .npm
 dist
