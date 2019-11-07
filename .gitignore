@@ -9,5 +9,4 @@ npm-debug.log*
 # Optional npm cache directory
 .npm
 dist
-src/firebase/config
 .cache
