@@ -13,48 +13,6 @@ import { AccountPage } from "./src/containers/AccountPage/accountpage";
 import { ContactUs } from "./src/containers/ContactUsPage/contactUs";
 
 const App = () => {
-  const selectors = [
-    {
-      pattern: /\\"/g,
-      replacement: "&quot;"
-    },
-    {
-      pattern: /&/g,
-      replacement: "&amp;"
-    },
-    {
-      pattern: /</g,
-      replacement: "&lt;"
-    },
-    {
-      pattern: />/g,
-      replacement: "&gt;"
-    },
-    {
-      pattern: /[\t\n\r]/g,
-      replacement: " "
-    },
-    {
-      pattern: /\s{2,}/g,
-      replacement: " "
-    }
-  ];
-  /**
-   * Encodes strings in text nodes.
-   * @param {Node} node - node to check.
-   * @returns {Node} - node with encoded special character if it has type 'text', input node otherwise.
-   */
-  module.exports = node =>
-    isText(node)
-      ? Object.assign({}, node, {
-          data: selectors.reduce(
-            (str, selector) =>
-              str.replace(selector.pattern, selector.replacement),
-            node.data
-          )
-        })
-      : node;
-
   return (
     <div>
       <Header />
