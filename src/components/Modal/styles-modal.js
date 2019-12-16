@@ -39,4 +39,5 @@ export const ButtonClose = styled.span`
 export const ContentWrapper = styled.div`
   font-size: 1.6rem;
   text-align: center;
+  color: black;
 `;

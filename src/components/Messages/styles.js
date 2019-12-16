@@ -22,11 +22,13 @@ export const StyledLi = styled.li`
 `;
 
 export const Avatar = styled.img`
-  width: 3.2rem;
-  height: 3.2rem;
+  position: relative;
+  top: 1.2rem;
+  width: 3rem;
+  height: 3rem;
 `;
 
-export const Username = styled.span`
+export const Username = styled.div`
   margin-left: 0.5rem;
   font-weight: bold;
   font-size: 1.6rem;

@@ -65,10 +65,9 @@ export const Messages = ({ chatId }) => {
     return (
       <div key={message.created_at}>
         <StyledLi>
-          <span>
-            <Avatar src={message.avatarURL} />
-          </span>
-          <Username>{message.username}</Username>
+          <Username>
+            <Avatar src={message.avatarURL} /> {message.username}
+          </Username>
           <Message>{message.message}</Message>
           <Date>{when}</Date>
         </StyledLi>

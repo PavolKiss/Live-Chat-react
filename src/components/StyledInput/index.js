@@ -1,7 +1,7 @@
 import React from "react";
 import { Input } from "./styles";
 
-export const StyledInput = ({ type, onChange, placeholder }) => {
+export const StyledInput = ({ type, onChange, placeholder, value }) => {
   return (
     <Input
       required
@@ -9,6 +9,7 @@ export const StyledInput = ({ type, onChange, placeholder }) => {
       type={type}
       autoComplete="on"
       onChange={onChange}
+      value={value}
       placeholder={placeholder}
     />
   );
