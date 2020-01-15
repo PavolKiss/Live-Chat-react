@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import * as firebase from 'firebase/app';
 import './style.css';
 import { Wrapper } from './styles';
@@ -19,6 +19,13 @@ export const AdminPage = () => {
   const [showAdmins, setShowAdmins] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [loadUserUpdateForms, setLoadUserUpdateForms] = useState(false);
+
+  const findUserByID = async () => {
+    const getUserByUID = firebase.functions().httpsCallable('findUsersByUID');
+    const response = await getUserByUID({ uid: userID });
+    console.log(response);
+    return response;
+  };
 
   const getAllUsers = async () => {
     try {
@@ -86,20 +93,6 @@ export const AdminPage = () => {
     });
   };
 
-  // updateUser() {
-  //   const updateUsers = functions.httpsCallable("updateUsers");
-  //   updateUsers({
-  //     uid: value,
-  //     displayName: displayName,
-  //     email: email,
-  //     photoURL: photoURL
-  //   })
-  //     .then(result => {
-  //       console.log(result);
-  //     })
-  //     .catch(err => console.log(err));
-  // }
-
   const { displayName, email } = updateUserCredentials;
 
   console.log(displayName);
@@ -165,7 +158,12 @@ export const AdminPage = () => {
           ×
         </ButtonClose>
         <StyledButton onClick={deleteUsers}>Delete User</StyledButton>
-        <StyledButton onClick={() => setLoadUserUpdateForms(true)}>
+        <StyledButton
+          onClick={() => {
+            setLoadUserUpdateForms(true);
+            findUserByID();
+          }}
+        >
           Update User
         </StyledButton>
         <div style={{ display: loadUserUpdateForms ? 'block' : 'none' }}>
