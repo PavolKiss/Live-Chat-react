@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import * as firebase from "../../firebase/index";
+import React, { useState, useEffect } from 'react';
+import * as firebase from '../../firebase/index';
 import {
   AccountWrapper,
   Username,
@@ -11,25 +11,21 @@ import {
   SetPassOrAvatarWrapper,
   ChooseAvatarWrapper,
   StyledLabel
-} from "./styles";
-import { StyledInput } from "../../components/StyledInput";
-import { StyledButton } from "../../components/StyledButton";
-import { Modal } from "../../components/Modal/modal";
-import {
-  ModalWrapper,
-  ButtonClose,
-  ContentWrapper
-} from "../../components/Modal/styles-modal";
+} from './styles';
+import { StyledInput } from '../../components/StyledInput';
+import { StyledButton } from '../../components/StyledButton';
+import { Modal } from '../../components/Modal/modal';
+import { ButtonClose } from '../../components/Modal/styles-modal';
 
 export const AccountPage = () => {
   const [userCredentials, setUserCredentials] = useState({
-    username: "",
-    email: "",
-    avatar: "",
+    username: '',
+    email: '',
+    avatar: '',
     isAdmin: false
   });
 
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState('');
   const [openModal, setOpenModal] = useState(false);
   const [image, setImage] = useState(null);
   const [progressBar, setProgressBar] = useState(0);
@@ -77,7 +73,7 @@ export const AccountPage = () => {
 
   const handleUpload = () => {
     const metadata = {
-      contentType: "image/jpeg"
+      contentType: 'image/jpeg'
     };
     const name = Date.now();
     const user = firebase.auth.currentUser;
@@ -85,7 +81,7 @@ export const AccountPage = () => {
       .child(`userAvatar/${name}`)
       .put(image, metadata);
     uploadTask.on(
-      "state_changed",
+      'state_changed',
       snapshot => {
         const progress = Math.round(
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100
@@ -130,13 +126,13 @@ export const AccountPage = () => {
   return (
     <AccountWrapper>
       <h1>Account Details</h1>
-      <Admin>{isAdmin ? "You are Admin" : ""}</Admin>
+      <Admin>{isAdmin ? 'You are Admin' : ''}</Admin>
       <div>
-        <StyledLabel htmlFor="file-input">
+        <StyledLabel htmlFor='file-input'>
           <UserAvatar src={avatar} />
           <ChooseAvatarWrapper>Change Avatar</ChooseAvatarWrapper>
           <div>
-            <progress hidden={disabled} value={progressBar} max="100">
+            <progress hidden={disabled} value={progressBar} max='100'>
               0%
             </progress>
           </div>
@@ -145,9 +141,9 @@ export const AccountPage = () => {
           </button>
         </StyledLabel>
         <input
-          style={{ display: "none" }}
-          id="file-input"
-          type="file"
+          style={{ display: 'none' }}
+          id='file-input'
+          type='file'
           onChange={handleImage}
         />
       </div>
@@ -155,16 +151,16 @@ export const AccountPage = () => {
       <form style={{ marginTop: 15 }} onSubmit={userUpdateProfile}>
         <Email>
           <StyledInput
-            type="email"
-            placeholder="Email Address"
+            type='email'
+            placeholder='Email Address'
             value={email}
             onChange={handleEmail}
           />
         </Email>
         <Username>
           <StyledInput
-            type="text"
-            placeholder="User Name"
+            type='text'
+            placeholder='User Name'
             value={username}
             onChange={handleUsername}
           />
@@ -178,16 +174,12 @@ export const AccountPage = () => {
       </form>
       <TextWrapper>
         <Modal openModal={openModal}>
-          <ModalWrapper>
-            <ButtonClose onClick={() => setOpenModal(false)}>×</ButtonClose>
-            <ContentWrapper>
-              <h1>Change Password</h1>
-              <form onSubmit={changePassword}>
-                <StyledInput type="password" />
-                <StyledButton>SAVE</StyledButton>
-              </form>
-            </ContentWrapper>
-          </ModalWrapper>
+          <ButtonClose onClick={() => setOpenModal(false)}>×</ButtonClose>
+          <h1>Change Password</h1>
+          <form onSubmit={changePassword}>
+            <StyledInput type='password' />
+            <StyledButton>SAVE</StyledButton>
+          </form>
         </Modal>
       </TextWrapper>
     </AccountWrapper>

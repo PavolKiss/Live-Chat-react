@@ -1,26 +1,31 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   Navigation,
   Wrapper,
   List,
   ListItem,
   StyledLink
-} from "./styles-header";
-import * as firebase from "../../firebase";
+} from './styles-header';
+import * as firebase from '../../firebase';
 
 const logout = () => {
-  firebase.auth.signOut().catch(err => console.log(err));
-  console.log("logout");
+  firebase.auth
+    .signOut()
+    .then(() => {
+      localStorage.clear();
+    })
+    .catch(err => console.log(err));
+  console.log('logout');
 };
 
 const mainLinks = {
-  home: { to: "/", title: "Home" },
-  chat: { to: "chat/general", title: "Home" },
-  contact: { to: "contact", title: "Contact Us" },
-  signin: { to: "signin", title: "Sign In" },
-  adminpanel: { to: "adminpanel", title: "Admin Panel" },
-  account: { to: "account", title: "Account" },
-  signout: { to: "/", title: "Sign Out", onClick: logout }
+  home: { to: '/', title: 'Home' },
+  chat: { to: 'chat/general', title: 'Home' },
+  contact: { to: 'contact', title: 'Contact Us' },
+  signin: { to: 'signin', title: 'Sign In' },
+  adminpanel: { to: 'adminpanel', title: 'Admin Panel' },
+  account: { to: 'account', title: 'Account' },
+  signout: { to: '/', title: 'Sign Out', onClick: logout }
 };
 
 const defaultLinks = [mainLinks.home, mainLinks.contact, mainLinks.signin];

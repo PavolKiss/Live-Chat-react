@@ -1,13 +1,13 @@
-import React, { useState } from "react";
-import { signin } from "../../api/auth";
-import { Wrapper } from "./styles";
-import { Button } from "../../components/StyledButton/styles";
-import { StyledInput } from "../../components/StyledInput";
-import { navigate } from "@reach/router";
+import React, { useState } from 'react';
+import { signin } from '../../api/auth';
+import { Wrapper } from './styles';
+import { Button } from '../../components/StyledButton/styles';
+import { StyledInput } from '../../components/StyledInput';
+import { navigate } from '@reach/router';
 
 export const LoginPage = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const handleEmail = e => setEmail(e.target.value);
 
@@ -17,8 +17,9 @@ export const LoginPage = () => {
     e.preventDefault();
     try {
       const response = await signin(email, password);
+      navigate('/chat/general');
       console.log(response);
-      navigate("/chat/general");
+      return response;
     } catch (error) {
       console.log(error);
     }
@@ -30,16 +31,16 @@ export const LoginPage = () => {
         <h1>Sign In</h1>
         <div>
           <StyledInput
-            type="email"
+            type='email'
             onChange={handleEmail}
-            placeholder="Email"
+            placeholder='Email'
           />
         </div>
         <div>
           <StyledInput
-            type="password"
+            type='password'
             onChange={handlePassword}
-            placeholder="Password"
+            placeholder='Password'
           />
         </div>
         <Button>Sign In</Button>

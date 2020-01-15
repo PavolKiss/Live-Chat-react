@@ -1,13 +1,14 @@
-import React from "react";
-import { Input } from "./styles";
+import React from 'react';
+import { Input } from './styles';
 
-export const StyledInput = ({ type, onChange, placeholder, value }) => {
+export const StyledInput = ({ type, onChange, placeholder, value, name }) => {
   return (
     <Input
       required
-      minLength="3"
+      minLength='3'
       type={type}
-      autoComplete="on"
+      autoComplete='on'
+      name={name}
       onChange={onChange}
       value={value}
       placeholder={placeholder}
