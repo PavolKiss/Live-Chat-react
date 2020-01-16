@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import * as firebase from 'firebase/app';
 import './style.css';
 import { Wrapper } from './styles';
@@ -23,7 +23,11 @@ export const AdminPage = () => {
   const findUserByID = async () => {
     const getUserByUID = firebase.functions().httpsCallable('findUsersByUID');
     const response = await getUserByUID({ uid: userID });
-    console.log(response);
+    setUpdateUserCredentials({
+      ...updateUserCredentials,
+      displayName: response.data.displayName,
+      email: response.data.email
+    });
     return response;
   };
 
@@ -94,9 +98,6 @@ export const AdminPage = () => {
   };
 
   const { displayName, email } = updateUserCredentials;
-
-  console.log(displayName);
-
   return (
     <div>
       <Wrapper>
@@ -175,13 +176,13 @@ export const AdminPage = () => {
               value={displayName}
               placeholder='User Name'
             />
-            {/* <StyledInput
+            <StyledInput
               type='email'
               name='email'
               onChange={handleUserCredentials}
               value={email}
               placeholder='Email Address'
-            /> */}
+            />
             <StyledButton>SAVE</StyledButton>
           </form>
         </div>
