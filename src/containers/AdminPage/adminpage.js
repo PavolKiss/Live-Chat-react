@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import * as firebase from 'firebase/app';
 import './style.css';
-import { Wrapper } from './styles';
+import { Wrapper, AdminPageButton, AdminActionsWrapper } from './styles';
 import { Modal } from '../../components/Modal/modal';
 import { ButtonClose } from '../../components/Modal/styles-modal';
 import { StyledButton } from '../../components/StyledButton';
@@ -101,8 +101,12 @@ export const AdminPage = () => {
   return (
     <div>
       <Wrapper>
-        <button onClick={() => setShowAdmins(true)}>Manage Admins</button>
-        <button onClick={getAllUsers}>Get all users</button>
+        <AdminActionsWrapper>
+          <AdminPageButton onClick={() => setShowAdmins(true)}>
+            Manage Admins
+          </AdminPageButton>
+          <AdminPageButton onClick={getAllUsers}>Get all users</AdminPageButton>
+        </AdminActionsWrapper>
         <div>
           <form
             onSubmit={addAdmin}

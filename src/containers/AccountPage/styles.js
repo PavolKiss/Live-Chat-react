@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import * as variable from "../../variables-css/variables";
+import styled from 'styled-components';
+import * as variable from '../../variables-css/variables';
 
 export const AccountWrapper = styled.div`
   display: flex;
@@ -26,8 +26,10 @@ export const UserAvatar = styled.img`
 
 export const SetPassOrAvatarWrapper = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   font-size: 1.6rem;
+  justify-content: center;
+  align-items: center;
 `;
 
 export const TextWrapper = styled.div`
@@ -44,6 +46,8 @@ export const ChangePasswordWrapper = styled.div`
   justify-content: center;
   color: black;
   background: no-repeat;
+  margin-top: 5px;
+  margin-bottom: 10px;
   &:hover {
     color: ${variable.darkBlue};
     cursor: pointer;

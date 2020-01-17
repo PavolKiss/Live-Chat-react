@@ -15,7 +15,11 @@ import {
 import { StyledInput } from '../../components/StyledInput';
 import { StyledButton } from '../../components/StyledButton';
 import { Modal } from '../../components/Modal/modal';
-import { ButtonClose } from '../../components/Modal/styles-modal';
+import {
+  ModalWrapper,
+  ButtonClose,
+  ContentWrapper
+} from '../../components/Modal/styles-modal';
 
 export const AccountPage = () => {
   const [userCredentials, setUserCredentials] = useState({
@@ -62,6 +66,7 @@ export const AccountPage = () => {
     setUserCredentials({ ...userCredentials, username: e.target.value });
   const handleEmail = e =>
     setUserCredentials({ ...userCredentials, email: e.target.value });
+  const handlePassword = e => setPassword(e.target.value);
 
   const handleImage = e => {
     if (e.target.files[0]) {
@@ -118,8 +123,10 @@ export const AccountPage = () => {
 
   const changePassword = async e => {
     e.preventDefault();
+    e.target.reset();
     const user = firebase.auth.currentUser;
     const response = await user.updatePassword(password);
+    setOpenModal(false);
     return response;
   };
 
@@ -166,6 +173,7 @@ export const AccountPage = () => {
           />
         </Username>
         <SetPassOrAvatarWrapper>
+          <div>or</div>
           <ChangePasswordWrapper onClick={() => setOpenModal(true)}>
             Change Password
           </ChangePasswordWrapper>
@@ -177,7 +185,7 @@ export const AccountPage = () => {
           <ButtonClose onClick={() => setOpenModal(false)}>×</ButtonClose>
           <h1>Change Password</h1>
           <form onSubmit={changePassword}>
-            <StyledInput type='password' />
+            <StyledInput type='password' onChange={handlePassword} />
             <StyledButton>SAVE</StyledButton>
           </form>
         </Modal>
