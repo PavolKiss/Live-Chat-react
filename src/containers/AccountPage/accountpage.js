@@ -15,11 +15,7 @@ import {
 import { StyledInput } from '../../components/StyledInput';
 import { StyledButton } from '../../components/StyledButton';
 import { Modal } from '../../components/Modal/modal';
-import {
-  ModalWrapper,
-  ButtonClose,
-  ContentWrapper
-} from '../../components/Modal/styles-modal';
+import { ButtonClose } from '../../components/Modal/styles-modal';
 
 export const AccountPage = () => {
   const [userCredentials, setUserCredentials] = useState({
@@ -133,7 +129,7 @@ export const AccountPage = () => {
   return (
     <AccountWrapper>
       <h1>Account Details</h1>
-      <Admin>{isAdmin ? 'You are Admin' : ''}</Admin>
+      <Admin>{isAdmin ? 'You are Admin' : `Welcome ${username}`}</Admin>
       <div>
         <StyledLabel htmlFor='file-input'>
           <UserAvatar src={avatar} />

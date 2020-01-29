@@ -9,12 +9,7 @@ import {
 import * as firebase from '../../firebase';
 
 const logout = () => {
-  firebase.auth
-    .signOut()
-    .then(() => {
-      localStorage.clear();
-    })
-    .catch(err => console.log(err));
+  firebase.auth.signOut().catch(err => console.log(err));
   console.log('logout');
 };
 

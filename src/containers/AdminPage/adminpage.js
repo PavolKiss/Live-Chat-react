@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import * as firebase from 'firebase/app';
 import './style.css';
+import { admin_actions } from '../../api/admin_actions';
 import { Wrapper, AdminPageButton, AdminActionsWrapper } from './styles';
 import { Modal } from '../../components/Modal/modal';
 import { ButtonClose } from '../../components/Modal/styles-modal';
 import { StyledButton } from '../../components/StyledButton';
 import { StyledInput } from '../../components/StyledInput';
+import { Popup } from '../../components/Popup/popup';
 
 export const AdminPage = () => {
   const [adminEmail, setAdminEmail] = useState('');
@@ -15,26 +16,29 @@ export const AdminPage = () => {
     displayName: '',
     email: ''
   });
+  const [popUpSucessMessage, setpopUpSucessMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [showAdmins, setShowAdmins] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [loadUserUpdateForms, setLoadUserUpdateForms] = useState(false);
 
   const findUserByID = async () => {
-    const getUserByUID = firebase.functions().httpsCallable('findUsersByUID');
-    const response = await getUserByUID({ uid: userID });
+    const response = await admin_actions('findUsersByUID', {
+      uid: userID
+    });
+    const { displayName, email } = response.data;
     setUpdateUserCredentials({
       ...updateUserCredentials,
-      displayName: response.data.displayName,
-      email: response.data.email
+      displayName: displayName,
+      email: email
     });
+    setLoadUserUpdateForms(true);
     return response;
   };
 
   const getAllUsers = async () => {
     try {
-      const callListOfUsers = firebase.functions().httpsCallable('listUsers');
-      const response = await callListOfUsers();
+      const response = await admin_actions('listUsers');
       setUsers(response.data.result);
       setLoading(true);
       return response;
@@ -46,10 +50,11 @@ export const AdminPage = () => {
   const addAdmin = async e => {
     e.preventDefault();
     try {
-      const addAdminRole = firebase.functions().httpsCallable('addAdminRole');
-      const response = await addAdminRole({ email: adminEmail });
-      console.log(response);
+      const response = await admin_actions('addAdminRole', {
+        email: adminEmail
+      });
       setShowAdmins(false);
+      setpopUpSucessMessage(response.data.message);
       return response;
     } catch (error) {
       console.log(error);
@@ -59,10 +64,9 @@ export const AdminPage = () => {
   const deleteUsers = async e => {
     e.preventDefault();
     try {
-      const deleteUser = firebase.functions().httpsCallable('deleteUser');
-      const response = await deleteUser({ uid: userID });
-      console.log(response);
+      const response = await admin_actions('deleteUser', { uid: userID });
       setOpenModal(false);
+      console.log(response);
       return response;
     } catch (error) {
       console.log(error);
@@ -72,8 +76,7 @@ export const AdminPage = () => {
   const updateUser = async e => {
     e.preventDefault();
     try {
-      const updateUsers = firebase.functions().httpsCallable('updateUsers');
-      const response = await updateUsers({
+      const response = await admin_actions('updateUsers', {
         uid: userID,
         displayName: updateUserCredentials.displayName
       });
@@ -98,6 +101,7 @@ export const AdminPage = () => {
   };
 
   const { displayName, email } = updateUserCredentials;
+
   return (
     <div>
       <Wrapper>
@@ -112,7 +116,12 @@ export const AdminPage = () => {
             onSubmit={addAdmin}
             style={{ display: showAdmins ? 'flex' : 'none' }}
           >
-            <input type='text' onChange={handleAdmin} value={adminEmail} />
+            <input
+              type='text'
+              onChange={handleAdmin}
+              value={adminEmail}
+              required
+            />
             <button>MAKE ADMIN</button>
           </form>
         </div>
@@ -163,14 +172,7 @@ export const AdminPage = () => {
           ×
         </ButtonClose>
         <StyledButton onClick={deleteUsers}>Delete User</StyledButton>
-        <StyledButton
-          onClick={() => {
-            setLoadUserUpdateForms(true);
-            findUserByID();
-          }}
-        >
-          Update User
-        </StyledButton>
+        <StyledButton onClick={() => findUserByID()}>Update User</StyledButton>
         <div style={{ display: loadUserUpdateForms ? 'block' : 'none' }}>
           <form onSubmit={updateUser}>
             <StyledInput
@@ -187,10 +189,16 @@ export const AdminPage = () => {
               value={email}
               placeholder='Email Address'
             />
-            <StyledButton>SAVE</StyledButton>
+            <StyledButton onClick={() => setLoadUserUpdateForms(false)}>
+              SAVE
+            </StyledButton>
           </form>
         </div>
       </Modal>
+      <Popup
+        style={{ display: popUpSucessMessage ? 'block' : 'none' }}
+        sucessChildren={popUpSucessMessage}
+      />
     </div>
   );
 };

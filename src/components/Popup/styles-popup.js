@@ -1,10 +1,12 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const PopupWrapper = styled.div`
   font-size: 2rem;
-  position: relative;
+  position: fixed;
   font-weight: bold;
-  bottom: 8rem;
+  right: 0;
+  left: 0;
+  bottom: 0;
 `;
 
 export const SucessWrapper = styled.div`
