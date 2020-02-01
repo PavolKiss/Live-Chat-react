@@ -7,10 +7,18 @@ import {
   StyledLink
 } from './styles-header';
 import * as firebase from '../../firebase';
+import swal from 'sweetalert';
 
 const logout = () => {
-  firebase.auth.signOut().catch(err => console.log(err));
-  console.log('logout');
+  try {
+    const response = firebase.auth.signOut();
+    swal('You are logged out.', {
+      icon: 'info'
+    });
+    return response;
+  } catch (error) {
+    swal('Oops!', 'Something went wrong!', 'error');
+  }
 };
 
 const mainLinks = {

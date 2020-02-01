@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import * as firebase from '../../firebase/index';
+import swal from 'sweetalert';
 import {
   AccountWrapper,
   Username,
@@ -89,8 +90,8 @@ export const AccountPage = () => {
         );
         setProgressBar(progress);
       },
-      error => {
-        console.log(error);
+      err => {
+        swal('Oops!', 'Something went wrong!', 'error', { text: err });
       },
       () => {
         firebase.storageRef
@@ -99,7 +100,10 @@ export const AccountPage = () => {
           .then(url => {
             user.updateProfile({ photoURL: url });
             setUserCredentials({ ...userCredentials, avatar: url });
-          });
+          })
+          .catch(err =>
+            swal('Oops!', 'Something went wrong!', 'error', { text: err })
+          );
       }
     );
   };
@@ -108,22 +112,29 @@ export const AccountPage = () => {
 
   const userUpdateProfile = async e => {
     e.preventDefault();
-    const user = firebase.auth.currentUser;
-
-    const response = await user.updateProfile({
-      displayName: username,
-      email: email
-    });
-    return response;
+    try {
+      const user = firebase.auth.currentUser;
+      const response = await user.updateProfile({
+        displayName: username,
+        email: email
+      });
+      return response;
+    } catch (error) {
+      swal('Oops!', 'Something went wrong!', 'error');
+    }
   };
 
   const changePassword = async e => {
     e.preventDefault();
     e.target.reset();
-    const user = firebase.auth.currentUser;
-    const response = await user.updatePassword(password);
-    setOpenModal(false);
-    return response;
+    try {
+      const user = firebase.auth.currentUser;
+      const response = await user.updatePassword(password);
+      setOpenModal(false);
+      return response;
+    } catch (error) {
+      swal('Oops!', 'Something went wrong!', 'error');
+    }
   };
 
   return (
