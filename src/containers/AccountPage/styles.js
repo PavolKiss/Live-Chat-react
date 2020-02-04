@@ -11,8 +11,6 @@ export const AccountWrapper = styled.div`
 
 export const Username = styled.div``;
 
-export const Admin = styled.div``;
-
 export const Email = styled.div``;
 
 export const UserAvatar = styled.img`

@@ -8,7 +8,6 @@ export const signin = async (email = null, password = null) => {
     );
     return response;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
@@ -31,6 +30,6 @@ export const signUp = async (
     });
     return response;
   } catch (error) {
-    console.log(error);
+    throw error;
   }
 };

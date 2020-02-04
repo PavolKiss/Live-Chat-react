@@ -2,7 +2,12 @@ import React, { useState } from 'react';
 import './style.css';
 import { admin_actions } from '../../api/admin_actions';
 import swal from 'sweetalert';
-import { Wrapper, AdminPageButton, AdminActionsWrapper } from './styles';
+import {
+  Wrapper,
+  AdminPageButton,
+  AdminActionsWrapper,
+  AddAdminForm
+} from './styles';
 import { Modal } from '../../components/Modal/modal';
 import { ButtonClose } from '../../components/Modal/styles-modal';
 import { StyledButton } from '../../components/StyledButton';
@@ -53,7 +58,6 @@ export const AdminPage = () => {
         loadRequest: true,
         hideButton: true
       });
-      swal('Users loaded!', { icon: 'info' });
       return response;
     } catch (error) {
       swal('Oops!', 'Something went wrong!', 'error', {
@@ -64,6 +68,7 @@ export const AdminPage = () => {
 
   const addAdmin = async e => {
     e.preventDefault();
+    e.target.reset();
     try {
       const response = await admin_actions('addAdminRole', {
         email: adminEmail
@@ -79,7 +84,6 @@ export const AdminPage = () => {
       });
       return response;
     } catch (error) {
-      console.log(error);
       swal('Oops!', 'Something went wrong!', 'error');
     }
   };
@@ -94,6 +98,7 @@ export const AdminPage = () => {
       });
       const message = response.data.message;
       swal(`User with ID ${message} `, { icon: 'success' });
+      getAllUsers();
       return response;
     } catch (error) {
       swal('Oops!', 'Something went wrong!', 'error');
@@ -103,9 +108,11 @@ export const AdminPage = () => {
   const updateUser = async e => {
     e.preventDefault();
     try {
+      const { displayName, email } = updateUserCredentials;
       const response = await admin_actions('updateUsers', {
         uid: userID,
-        displayName: updateUserCredentials.displayName
+        displayName: displayName,
+        email: email
       });
       setLoading({
         ...loading,
@@ -115,9 +122,10 @@ export const AdminPage = () => {
       swal(`User with id ${message}`, {
         icon: 'success'
       });
+      getAllUsers();
       return response;
     } catch (error) {
-      swal('Oops!', 'Something went wrong!', 'error');
+      swal('Oops!', 'Please check if email already exist.', 'error');
     }
   };
 
@@ -126,10 +134,9 @@ export const AdminPage = () => {
   const handleUserID = event => setUserID(event.target.value);
 
   const handleUserCredentials = e => {
-    const value = e.target.value;
     setUpdateUserCredentials({
       ...updateUserCredentials,
-      [e.target.name]: value
+      [e.target.name]: e.target.value
     });
   };
 
@@ -154,7 +161,7 @@ export const AdminPage = () => {
               })
             }
           >
-            Manage Admins
+            Add Admin
           </AdminPageButton>
           <AdminPageButton
             style={{ display: hideButton ? 'none' : 'inline-block' }}
@@ -169,29 +176,31 @@ export const AdminPage = () => {
             Get all users
           </AdminPageButton>
         </AdminActionsWrapper>
-        <div>
-          <form
-            onSubmit={addAdmin}
-            style={{ display: showAdmins ? 'flex' : 'none' }}
-          >
-            <input
-              type='text'
-              onChange={handleAdmin}
-              value={adminEmail}
-              required
-            />
-            <button>MAKE ADMIN</button>
-          </form>
-        </div>
+        <AddAdminForm
+          onSubmit={addAdmin}
+          style={{ display: showAdmins ? 'flex' : 'none' }}
+        >
+          <StyledInput
+            type='text'
+            onChange={handleAdmin}
+            value={adminEmail}
+            placeholder='Enter email address'
+          />
+          <div style={{ fontSize: '1.3rem' }}>
+            *Please make sure you entering correct e-mail address
+          </div>
+          <StyledButton>MAKE ADMIN</StyledButton>
+        </AddAdminForm>
         <div>
           {loadRequest ? (
-            <table>
+            <table className='usersTable'>
               <tbody style={{ textAlign: 'center' }}>
                 <tr>
                   <th>User ID</th>
                   <th>Email</th>
                   <th>Name</th>
                   <th>Photo URL</th>
+                  <th>Action</th>
                 </tr>
 
                 {users.map(user => {

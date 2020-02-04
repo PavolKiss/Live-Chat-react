@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const WrapperRow = styled.div`
   display: flex;
@@ -9,6 +9,7 @@ export const LeftWrapper = styled.div`
   justify-content: flex-start;
   position: relative;
   top: 15rem;
+  right: 1rem;
 `;
 
 export const ContentWrapper = styled.div`
@@ -21,5 +22,6 @@ export const ContentWrapper = styled.div`
 export const RightWrapper = styled.div`
   justify-content: flex-end;
   position: relative;
-  top: 14rem;
+  top: 15rem;
+  left: 2rem;
 `;

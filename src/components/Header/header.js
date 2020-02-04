@@ -12,9 +12,7 @@ import swal from 'sweetalert';
 const logout = () => {
   try {
     const response = firebase.auth.signOut();
-    swal('You are logged out.', {
-      icon: 'info'
-    });
+    swal('You are logged out.', { icon: 'info' });
     return response;
   } catch (error) {
     swal('Oops!', 'Something went wrong!', 'error');

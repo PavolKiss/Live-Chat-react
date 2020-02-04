@@ -6,7 +6,6 @@ import {
   Username,
   Email,
   UserAvatar,
-  Admin,
   TextWrapper,
   ChangePasswordWrapper,
   SetPassOrAvatarWrapper,
@@ -27,9 +26,9 @@ export const AccountPage = () => {
   });
 
   const [password, setPassword] = useState('');
-  const [openModal, setOpenModal] = useState(false);
   const [image, setImage] = useState(null);
   const [progressBar, setProgressBar] = useState(0);
+  const [openModal, setOpenModal] = useState(false);
   const [disabled, setDisabled] = useState(true);
 
   useEffect(() => {
@@ -100,6 +99,8 @@ export const AccountPage = () => {
           .then(url => {
             user.updateProfile({ photoURL: url });
             setUserCredentials({ ...userCredentials, avatar: url });
+            setDisabled(true);
+            swal('Your avatar was changed.', { icon: 'success' });
           })
           .catch(err =>
             swal('Oops!', 'Something went wrong!', 'error', { text: err })
@@ -108,7 +109,7 @@ export const AccountPage = () => {
     );
   };
 
-  const { username, email, avatar, isAdmin } = userCredentials;
+  const { username, email, avatar } = userCredentials;
 
   const userUpdateProfile = async e => {
     e.preventDefault();
@@ -118,6 +119,7 @@ export const AccountPage = () => {
         displayName: username,
         email: email
       });
+      swal('Your profile was updated.', { icon: 'success' });
       return response;
     } catch (error) {
       swal('Oops!', 'Something went wrong!', 'error');
@@ -131,6 +133,7 @@ export const AccountPage = () => {
       const user = firebase.auth.currentUser;
       const response = await user.updatePassword(password);
       setOpenModal(false);
+      swal('Your password was successfully changed.', { icon: 'success' });
       return response;
     } catch (error) {
       swal('Oops!', 'Something went wrong!', 'error');
@@ -140,7 +143,6 @@ export const AccountPage = () => {
   return (
     <AccountWrapper>
       <h1>Account Details</h1>
-      <Admin>{isAdmin ? 'You are Admin' : `Welcome ${username}`}</Admin>
       <div>
         <StyledLabel htmlFor='file-input'>
           <UserAvatar src={avatar} />

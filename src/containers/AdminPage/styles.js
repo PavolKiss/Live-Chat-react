@@ -28,3 +28,10 @@ export const AdminPageButton = styled.button`
     color: black;
   }
 `;
+
+export const AddAdminForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
