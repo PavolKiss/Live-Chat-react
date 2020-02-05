@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import * as firebase from '../../firebase/index';
 import swal from 'sweetalert';
+import { LoadPage } from '../LoadPage/loadpage';
 import {
   AccountWrapper,
   Username,
@@ -25,6 +26,7 @@ export const AccountPage = () => {
     isAdmin: false
   });
 
+  const [load, setLoad] = useState(false);
   const [password, setPassword] = useState('');
   const [image, setImage] = useState(null);
   const [progressBar, setProgressBar] = useState(0);
@@ -32,12 +34,13 @@ export const AccountPage = () => {
   const [disabled, setDisabled] = useState(true);
 
   useEffect(() => {
+    setLoad(true);
     const unsubscribe = firebase.auth.onAuthStateChanged(async user => {
       const isAdmin = user
         ? (await user.getIdTokenResult()).claims.admin
         : false;
-
       if (user) {
+        setLoad(false);
         if (isAdmin) {
           setUserCredentials({
             username: user.displayName,
@@ -122,7 +125,8 @@ export const AccountPage = () => {
       swal('Your profile was updated.', { icon: 'success' });
       return response;
     } catch (error) {
-      swal('Oops!', 'Something went wrong!', 'error');
+      const errMessage = error;
+      swal({ title: 'Oops!', text: errMessage, icon: 'error' });
     }
   };
 
@@ -133,72 +137,88 @@ export const AccountPage = () => {
       const user = firebase.auth.currentUser;
       const response = await user.updatePassword(password);
       setOpenModal(false);
-      swal('Your password was successfully changed.', { icon: 'success' });
+      firebase.auth.signOut();
+      swal(
+        'Password successfully changed.',
+        'Please sign in with your new password!',
+        'success'
+      );
       return response;
     } catch (error) {
-      swal('Oops!', 'Something went wrong!', 'error');
+      const errMessage = error;
+      swal({ title: 'Oops!', text: errMessage, icon: 'error' });
     }
   };
 
   return (
-    <AccountWrapper>
-      <h1>Account Details</h1>
-      <div>
-        <StyledLabel htmlFor='file-input'>
-          <UserAvatar src={avatar} />
-          <ChooseAvatarWrapper>Change Avatar</ChooseAvatarWrapper>
+    <div>
+      {load ? (
+        <LoadPage load={load} />
+      ) : (
+        <AccountWrapper>
+          <h1>Account Details</h1>
           <div>
-            <progress hidden={disabled} value={progressBar} max='100'>
-              0%
-            </progress>
+            <StyledLabel htmlFor='file-input'>
+              <UserAvatar src={avatar} />
+              <ChooseAvatarWrapper>Change Avatar</ChooseAvatarWrapper>
+              <div>
+                <progress hidden={disabled} value={progressBar} max='100'>
+                  0%
+                </progress>
+              </div>
+              <button
+                onClick={handleUpload}
+                hidden={disabled}
+                disabled={disabled}
+              >
+                Save img
+              </button>
+            </StyledLabel>
+            <input
+              style={{ display: 'none' }}
+              id='file-input'
+              type='file'
+              onChange={handleImage}
+            />
           </div>
-          <button onClick={handleUpload} hidden={disabled} disabled={disabled}>
-            Save img
-          </button>
-        </StyledLabel>
-        <input
-          style={{ display: 'none' }}
-          id='file-input'
-          type='file'
-          onChange={handleImage}
-        />
-      </div>
 
-      <form style={{ marginTop: 15 }} onSubmit={userUpdateProfile}>
-        <Email>
-          <StyledInput
-            type='email'
-            placeholder='Email Address'
-            value={email}
-            onChange={handleEmail}
-          />
-        </Email>
-        <Username>
-          <StyledInput
-            type='text'
-            placeholder='User Name'
-            value={username}
-            onChange={handleUsername}
-          />
-        </Username>
-        <SetPassOrAvatarWrapper>
-          <div>or</div>
-          <ChangePasswordWrapper onClick={() => setOpenModal(true)}>
-            Change Password
-          </ChangePasswordWrapper>
-        </SetPassOrAvatarWrapper>
-        <StyledButton>SAVE</StyledButton>
-      </form>
-      <TextWrapper>
-        <Modal openModal={openModal}>
-          <ButtonClose onClick={() => setOpenModal(false)}>×</ButtonClose>
-          <h1>Change Password</h1>
-          <form onSubmit={changePassword}>
-            <StyledInput type='password' onChange={handlePassword} />
+          <form style={{ marginTop: 15 }} onSubmit={userUpdateProfile}>
+            <Email>
+              <StyledInput
+                type='email'
+                placeholder='Email Address'
+                value={email}
+                onChange={handleEmail}
+              />
+            </Email>
+            <Username>
+              <StyledInput
+                type='text'
+                placeholder='User Name'
+                value={username}
+                onChange={handleUsername}
+              />
+            </Username>
+            <SetPassOrAvatarWrapper>
+              <div>or</div>
+              <ChangePasswordWrapper onClick={() => setOpenModal(true)}>
+                Change Password
+              </ChangePasswordWrapper>
+            </SetPassOrAvatarWrapper>
             <StyledButton>SAVE</StyledButton>
           </form>
-        </Modal>
-      </TextWrapper>
-    </AccountWrapper>
+          <TextWrapper>
+            <Modal openModal={openModal}>
+              <ButtonClose onClick={() => setOpenModal(false)}>×</ButtonClose>
+              <h1>Change Password</h1>
+              <form onSubmit={changePassword}>
+                <StyledInput type='password' onChange={handlePassword} />
+                <StyledButton>SAVE</StyledButton>
+              </form>
+            </Modal>
+          </TextWrapper>
+        </AccountWrapper>
+      )}
+    </div>
   );
 };

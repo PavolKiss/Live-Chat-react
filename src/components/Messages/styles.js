@@ -1,6 +1,6 @@
-import styled from "styled-components";
-import * as variable from "../../variables-css/variables";
-import { Link } from "@reach/router";
+import styled from 'styled-components';
+import * as variable from '../../variables-css/variables';
+import { Link } from '@reach/router';
 
 export const StyledUl = styled.ul`
   max-height: 50rem;
@@ -55,9 +55,8 @@ export const MessageArea = styled.textarea`
   width: 100%;
   border-bottom: 0.1rem solid ${variable.darkBlue};
   overflow: auto;
-  height: auto;
   line-height: normal;
-  margin-top: 1rem;
+  margin-top: 5rem;
   opacity: 0.5;
   padding: 0.8rem 0 0.8rem 0;
   font-size: 1.6rem;

@@ -60,9 +60,8 @@ export const AdminPage = () => {
       });
       return response;
     } catch (error) {
-      swal('Oops!', 'Something went wrong!', 'error', {
-        text: error
-      });
+      const errMessage = error;
+      swal({ title: 'Oops!', text: errMessage, icon: 'error' });
     }
   };
 
@@ -84,7 +83,8 @@ export const AdminPage = () => {
       });
       return response;
     } catch (error) {
-      swal('Oops!', 'Something went wrong!', 'error');
+      const errMessage = error;
+      swal({ title: 'Oops!', text: errMessage, icon: 'error' });
     }
   };
 
@@ -101,7 +101,8 @@ export const AdminPage = () => {
       getAllUsers();
       return response;
     } catch (error) {
-      swal('Oops!', 'Something went wrong!', 'error');
+      const errMessage = error;
+      swal({ title: 'Oops!', text: errMessage, icon: 'error' });
     }
   };
 
@@ -119,7 +120,9 @@ export const AdminPage = () => {
         openModal: false
       });
       const message = response.data.message;
-      swal(`User with id ${message}`, {
+      swal({
+        title: 'User successfully updated.',
+        text: `User with id ${message}`,
         icon: 'success'
       });
       getAllUsers();

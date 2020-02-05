@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
-import * as firebase from "../../firebase/index";
-import * as firebaseApp from "firebase/app";
-import { formatDistanceToNow } from "date-fns";
+import React, { useState, useEffect } from 'react';
+import * as firebase from '../../firebase/index';
+import * as firebaseApp from 'firebase/app';
+import { formatDistanceToNow } from 'date-fns';
 import {
   StyledUl,
   StyledLi,
@@ -13,51 +13,58 @@ import {
   Room,
   Wrapper,
   SubmitButton
-} from "./styles";
+} from './styles';
+import { LoadPage } from '../../containers/LoadPage/loadpage';
 
 export const Messages = ({ chatId }) => {
   const [messages, setMessages] = useState([]);
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(true);
 
   const chat = useEffect(() => {
-    const onSnap = async () => {
-      const newArray = [];
-      const response = await firebase.db
-        .collection("live-chat")
-        .where("room", "==", chatId)
-        .orderBy("created_at")
-        .onSnapshot(snapshot => {
-          snapshot.docChanges().map(change => {
-            if (change.type === "added") {
-              newArray.push(change.doc.data());
-            }
-            newArray.concat(messages);
+    (async () => {
+      try {
+        const newArray = [];
+        const response = await firebase.db
+          .collection('live-chat')
+          .where('room', '==', chatId)
+          .orderBy('created_at')
+          .onSnapshot(snapshot => {
+            snapshot.docChanges().map(change => {
+              if (change.type === 'added') {
+                newArray.push(change.doc.data());
+              }
+              newArray.concat(messages);
+            });
+            setMessages(newArray);
+            setLoading(false);
+            return response;
           });
-          setMessages(newArray);
-          setLoading(false);
-        });
-      return response;
-    };
-    onSnap();
+      } catch (error) {
+        console.log(error);
+      }
+    })();
   }, [sendMessage, chatId]);
 
   useEffect(() => {
-    const getData = async () => {
-      const response = await firebase.db
-        .collection("live-chat")
-        .where("room", "==", chatId)
-        .orderBy("created_at")
-        .get();
-      const array = [];
-      response.forEach(message => {
-        array.push(message.data());
-      });
-      setMessages(array);
-      setLoading(false);
-      return response;
-    };
-    getData();
+    (async () => {
+      try {
+        const response = await firebase.db
+          .collection('live-chat')
+          .where('room', '==', chatId)
+          .orderBy('created_at')
+          .get();
+        const array = [];
+        response.forEach(message => {
+          array.push(message.data());
+        });
+        setMessages(array);
+        setLoading(false);
+        return response;
+      } catch (error) {
+        console.log(error);
+      }
+    })();
   }, [chatId, chat]);
 
   const displayMessages = messages.map(message => {
@@ -82,7 +89,7 @@ export const Messages = ({ chatId }) => {
       if (user) {
         const username = user.displayName;
         const avatarURL = user.photoURL;
-        const database = firebase.db.collection("live-chat");
+        const database = firebase.db.collection('live-chat');
         const now = new window.Date();
         const mssg = {
           message,
@@ -98,21 +105,30 @@ export const Messages = ({ chatId }) => {
     return () => unsubscribe();
   };
 
+  const autoResizeTextArea = e => {
+    e.target.style.height = 'inherit';
+    e.target.style.height = `${e.target.scrollHeight}px`;
+  };
+
   return loading ? (
-    <div>loading...</div>
+    <LoadPage load={loading} />
   ) : (
     <div>
       <Wrapper>
-        <Room to="/chat/general">General</Room>
-        <Room to="/chat/gaming">Gaming</Room>
-        <Room to="/chat/cars">Cars</Room>
-        <Room to="/chat/music">Music</Room>
+        <Room to='/chat/general'>General</Room>
+        <Room to='/chat/gaming'>Gaming</Room>
+        <Room to='/chat/cars'>Cars</Room>
+        <Room to='/chat/music'>Music</Room>
       </Wrapper>
 
       <StyledUl>{displayMessages}</StyledUl>
       <div>
-        <MessageArea id="area" onChange={handleMessage}></MessageArea>
-        <label htmlFor="area">Your Message</label>
+        <MessageArea
+          id='area'
+          onKeyDown={autoResizeTextArea}
+          onChange={handleMessage}
+        ></MessageArea>
+        <label htmlFor='area'>Your Message</label>
       </div>
       <SubmitButton onClick={sendMessage}>Submit</SubmitButton>
     </div>

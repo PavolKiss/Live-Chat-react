@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Row,
   Col_1_of_2,
@@ -6,15 +6,16 @@ import {
   HomePageContext,
   HomePageImage,
   HomePageButton
-} from "./styles";
-import * as firebase from "../../firebase/index";
-import { navigate } from "@reach/router";
+} from './styles';
+import * as firebase from '../../firebase/index';
+import { navigate } from '@reach/router';
 
 const unsubscribe = firebase.auth.onAuthStateChanged(user => {
-  if (user && navigate() !== navigate("/chat/general")) {
-    navigate("/chat/general");
+  //if user is logged -> redirect to /chat/general
+  if (user && navigate() !== navigate('/chat/general')) {
+    navigate('/chat/general');
   } else {
-    navigate("/");
+    navigate('/');
   }
   return () => unsubscribe();
 });
@@ -36,15 +37,15 @@ export const Homepage = () => {
             and more recently with desktop publishing software like Aldus
             PageMaker including versions of Lorem Ipsum.
             <div>
-              <HomePageButton to="signup">Register Now</HomePageButton>
+              <HomePageButton to='signup'>Register Now</HomePageButton>
             </div>
           </HomePageContext>
         </Col_1_of_2>
 
         <Col_1_of_2>
           <HomePageImage
-            src="https://firebasestorage.googleapis.com/v0/b/livechat-12a55.appspot.com/o/25063663.jpg?alt=media&token=4fa5ed8e-6a4f-48cb-a7d3-5f3eedc5693a"
-            alt="home-page-image"
+            src='https://firebasestorage.googleapis.com/v0/b/livechat-12a55.appspot.com/o/25063663.jpg?alt=media&token=4fa5ed8e-6a4f-48cb-a7d3-5f3eedc5693a'
+            alt='home-page-image'
           />
         </Col_1_of_2>
       </Row>

@@ -39,6 +39,7 @@ export const RegisterPage = () => {
   return (
     <form onSubmit={signup}>
       <Wrapper>
+        <h1>Sign Up</h1>
         <div>
           <StyledInput
             type='text'

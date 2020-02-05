@@ -1,5 +1,6 @@
 import React from 'react';
+import { LoadingAnimation, Wrapper } from './style';
 
 export const LoadPage = ({ load = false }) => {
-  return <div>{load && <h1>Loading please wait...</h1>}</div>;
+  return <Wrapper>{load && <LoadingAnimation />}</Wrapper>;
 };
