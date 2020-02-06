@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import * as variable from '../../variables-css/variables';
+import edit_Icon from '../../images/editIcon/edit-icon1.svg';
 
 export const Wrapper = styled.div`
   display: flex;
@@ -34,4 +35,12 @@ export const AddAdminForm = styled.form`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+`;
+
+export const ActionButton = styled.button`
+  outline: none;
+  background: url(${edit_Icon}) no-repeat scroll 0 0 transparent;
+  cursor: pointer;
+  padding: 2rem 2rem;
+  border: none;
 `;

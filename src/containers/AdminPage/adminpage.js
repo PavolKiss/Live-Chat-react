@@ -6,7 +6,8 @@ import {
   Wrapper,
   AdminPageButton,
   AdminActionsWrapper,
-  AddAdminForm
+  AddAdminForm,
+  ActionButton
 } from './styles';
 import { Modal } from '../../components/Modal/modal';
 import { ButtonClose } from '../../components/Modal/styles-modal';
@@ -26,6 +27,7 @@ export const AdminPage = () => {
     loadRequest: false,
     loadComponent: false,
     loadUserUpdateForms: false,
+    deleteUser: false,
     showAdmins: false,
     openModal: false,
     hideButton: false
@@ -90,20 +92,32 @@ export const AdminPage = () => {
 
   const deleteUsers = async e => {
     e.preventDefault();
-    try {
-      const response = await admin_actions('deleteUser', { uid: userID });
-      setLoading({
-        ...loading,
-        openModal: false
-      });
-      const message = response.data.message;
-      swal(`User with ID ${message} `, { icon: 'success' });
-      getAllUsers();
-      return response;
-    } catch (error) {
-      const errMessage = error;
-      swal({ title: 'Oops!', text: errMessage, icon: 'error' });
-    }
+    swal({
+      title: 'Are you sure?',
+      text: 'Once deleted, you will not be able to recover this user!',
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true
+    })
+      .then(async willDelete => {
+        if (willDelete) {
+          try {
+            const response = await admin_actions('deleteUser', { uid: userID });
+            setLoading({
+              ...loading,
+              openModal: false
+            });
+            const message = response.data.message;
+            swal(`User with ID ${message} `, { icon: 'success' });
+            getAllUsers();
+            return response;
+          } catch (error) {
+            const errMessage = error;
+            swal({ title: 'Oops!', text: errMessage, icon: 'error' });
+          }
+        }
+      })
+      .catch(err => console.log(err));
   };
 
   const updateUser = async e => {
@@ -131,6 +145,30 @@ export const AdminPage = () => {
       swal('Oops!', 'Please check if email already exist.', 'error');
     }
   };
+
+  const mapUsers = users.map(user => {
+    const { email, uid, displayName, photoURL } = user;
+    return (
+      <tr key={uid}>
+        <td>{uid}</td>
+        <td>{email}</td>
+        <td>{displayName}</td>
+        <td>{photoURL}</td>
+        <td>
+          <ActionButton
+            value={uid}
+            onClick={() => {
+              handleUserID(event);
+              setLoading({
+                ...loading,
+                openModal: true
+              });
+            }}
+          ></ActionButton>
+        </td>
+      </tr>
+    );
+  });
 
   const handleAdmin = e => setAdminEmail(e.target.value);
 
@@ -190,7 +228,7 @@ export const AdminPage = () => {
             placeholder='Enter email address'
           />
           <div style={{ fontSize: '1.3rem' }}>
-            *Please make sure you entering correct e-mail address
+            *Please make sure you are entering correct e-mail address
           </div>
           <StyledButton>MAKE ADMIN</StyledButton>
         </AddAdminForm>
@@ -203,34 +241,9 @@ export const AdminPage = () => {
                   <th>Email</th>
                   <th>Name</th>
                   <th>Photo URL</th>
-                  <th>Action</th>
+                  <th>Manage</th>
                 </tr>
-
-                {users.map(user => {
-                  const { email, uid, displayName, photoURL } = user;
-                  return (
-                    <tr key={uid}>
-                      <td>{uid}</td>
-                      <td>{email}</td>
-                      <td>{displayName}</td>
-                      <td>{photoURL}</td>
-                      <td>
-                        <button
-                          value={uid}
-                          onClick={() => {
-                            handleUserID(event);
-                            setLoading({
-                              ...loading,
-                              openModal: true
-                            });
-                          }}
-                        >
-                          Manage User
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })}
+                {mapUsers}
               </tbody>
             </table>
           ) : (
