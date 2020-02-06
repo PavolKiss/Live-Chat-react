@@ -90,34 +90,40 @@ export const AdminPage = () => {
     }
   };
 
-  const deleteUsers = async e => {
-    e.preventDefault();
-    swal({
+  const confirmPopUp = async e => {
+    const popUpStatus = await swal({
       title: 'Are you sure?',
       text: 'Once deleted, you will not be able to recover this user!',
       icon: 'warning',
       buttons: true,
       dangerMode: true
-    })
-      .then(async willDelete => {
-        if (willDelete) {
-          try {
-            const response = await admin_actions('deleteUser', { uid: userID });
-            setLoading({
-              ...loading,
-              openModal: false
-            });
-            const message = response.data.message;
-            swal(`User with ID ${message} `, { icon: 'success' });
-            getAllUsers();
-            return response;
-          } catch (error) {
-            const errMessage = error;
-            swal({ title: 'Oops!', text: errMessage, icon: 'error' });
-          }
-        }
-      })
-      .catch(err => console.log(err));
+    });
+    return deleteUsers(e, popUpStatus);
+  };
+
+  const deleteUsers = async (e, popUpStatus) => {
+    e.persist();
+    if (popUpStatus) {
+      try {
+        const response = await admin_actions('deleteUser', { uid: userID });
+        setLoading({
+          ...loading,
+          openModal: false
+        });
+        const message = response.data.message;
+        swal(`User with ID ${message} `, { icon: 'success' });
+        getAllUsers();
+        return response;
+      } catch (error) {
+        const errMessage = error;
+        swal({ title: 'Oops!', text: errMessage, icon: 'error' });
+      }
+    }
+    return swal(
+      'Invalid data!',
+      'Please make sure you passing correct data.',
+      'error'
+    );
   };
 
   const updateUser = async e => {
@@ -264,7 +270,7 @@ export const AdminPage = () => {
         >
           ×
         </ButtonClose>
-        <StyledButton onClick={deleteUsers}>Delete User</StyledButton>
+        <StyledButton onClick={confirmPopUp}>Delete User</StyledButton>
         <StyledButton onClick={() => findUserByID()}>Update User</StyledButton>
         <div style={{ display: loadUserUpdateForms ? 'block' : 'none' }}>
           <form onSubmit={updateUser}>
