@@ -84,25 +84,29 @@ export const Messages = ({ chatId }) => {
 
   const handleMessage = e => setMessage(e.target.value);
 
-  const sendMessage = async () => {
-    const unsubscribe = firebase.auth.onAuthStateChanged(user => {
-      if (user) {
-        const username = user.displayName;
-        const avatarURL = user.photoURL;
-        const database = firebase.db.collection('live-chat');
-        const now = new window.Date();
-        const mssg = {
-          message,
-          username,
-          avatarURL,
-          room: chatId,
-          created_at: firebaseApp.firestore.Timestamp.fromDate(now)
-        };
-        const response = database.add(mssg);
-        return response;
-      }
-    });
-    return () => unsubscribe();
+  const sendMessage = () => {
+    try {
+      const unsubscribe = firebase.auth.onAuthStateChanged(async user => {
+        if (user) {
+          const username = user.displayName;
+          const avatarURL = user.photoURL;
+          const database = firebase.db.collection('live-chat');
+          const now = new window.Date();
+          const mssg = {
+            message,
+            username,
+            avatarURL,
+            room: chatId,
+            created_at: firebaseApp.firestore.Timestamp.fromDate(now)
+          };
+          const response = await database.add(mssg);
+          return response;
+        }
+      });
+      return () => unsubscribe();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const autoResizeTextArea = e => {
@@ -126,8 +130,7 @@ export const Messages = ({ chatId }) => {
         <MessageArea
           id='area'
           onKeyDown={autoResizeTextArea}
-          onChange={handleMessage}
-        ></MessageArea>
+          onChange={handleMessage}></MessageArea>
         <label htmlFor='area'>Your Message</label>
       </div>
       <SubmitButton onClick={sendMessage}>Submit</SubmitButton>

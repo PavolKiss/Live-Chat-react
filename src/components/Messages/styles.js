@@ -58,7 +58,6 @@ export const MessageArea = styled.textarea`
   line-height: normal;
   margin-top: 5rem;
   opacity: 0.5;
-  padding: 0.8rem 0 0.8rem 0;
   font-size: 1.6rem;
   &:focus {
     border-bottom: 0.1rem solid ${variable.darkBlue};

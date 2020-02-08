@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './style.css';
 import { admin_actions } from '../../api/admin_actions';
+import * as firebase from '../../firebase/index';
 import swal from 'sweetalert';
 import {
   Wrapper,
@@ -23,6 +24,7 @@ export const AdminPage = () => {
     displayName: '',
     email: ''
   });
+  const [messagesContactUs, setMessagesContactUs] = useState([]);
   const [loading, setLoading] = useState({
     loadRequest: false,
     loadComponent: false,
@@ -118,10 +120,12 @@ export const AdminPage = () => {
         const errMessage = error;
         swal({ title: 'Oops!', text: errMessage, icon: 'error' });
       }
+    } else if (popUpStatus === null) {
+      return;
     }
     return swal(
       'Invalid data!',
-      'Please make sure you passing correct data.',
+      'Please make sure you are passing correct data.',
       'error'
     );
   };
@@ -152,7 +156,17 @@ export const AdminPage = () => {
     }
   };
 
-  const mapUsers = users.map(user => {
+  const getMessages = async () => {
+    const response = await firebase.db.collection('contact-us').get();
+    const messages = [];
+    response.forEach(message => {
+      messages.push(message.data());
+    });
+    setMessagesContactUs(messages);
+    return response;
+  };
+
+  const showAllUsers = users.map(user => {
     const { email, uid, displayName, photoURL } = user;
     return (
       <tr key={uid}>
@@ -169,8 +183,7 @@ export const AdminPage = () => {
                 ...loading,
                 openModal: true
               });
-            }}
-          ></ActionButton>
+            }}></ActionButton>
         </td>
       </tr>
     );
@@ -197,6 +210,7 @@ export const AdminPage = () => {
     hideButton
   } = loading;
 
+  console.log(messagesContactUs);
   return (
     <div>
       <Wrapper>
@@ -206,8 +220,7 @@ export const AdminPage = () => {
               setLoading({
                 showAdmins: true
               })
-            }
-          >
+            }>
             Add Admin
           </AdminPageButton>
           <AdminPageButton
@@ -218,15 +231,16 @@ export const AdminPage = () => {
                 loadComponent: true
               });
               getAllUsers();
-            }}
-          >
+            }}>
             Get all users
+          </AdminPageButton>
+          <AdminPageButton onClick={getMessages}>
+            Contact us messages
           </AdminPageButton>
         </AdminActionsWrapper>
         <AddAdminForm
           onSubmit={addAdmin}
-          style={{ display: showAdmins ? 'flex' : 'none' }}
-        >
+          style={{ display: showAdmins ? 'flex' : 'none' }}>
           <StyledInput
             type='text'
             onChange={handleAdmin}
@@ -249,7 +263,7 @@ export const AdminPage = () => {
                   <th>Photo URL</th>
                   <th>Manage</th>
                 </tr>
-                {mapUsers}
+                {showAllUsers}
               </tbody>
             </table>
           ) : (
@@ -266,8 +280,7 @@ export const AdminPage = () => {
               openModal: false,
               loadUserUpdateForms: false
             });
-          }}
-        >
+          }}>
           ×
         </ButtonClose>
         <StyledButton onClick={confirmPopUp}>Delete User</StyledButton>
@@ -294,8 +307,7 @@ export const AdminPage = () => {
                   ...loading,
                   loadUserUpdateForms: false
                 })
-              }
-            >
+              }>
               SAVE
             </StyledButton>
           </form>
