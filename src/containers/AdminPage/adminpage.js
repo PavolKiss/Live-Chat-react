@@ -15,6 +15,7 @@ import { ButtonClose } from '../../components/Modal/styles-modal';
 import { StyledButton } from '../../components/StyledButton';
 import { StyledInput } from '../../components/StyledInput';
 import { LoadPage } from '../LoadPage/loadpage';
+import { StyledTable } from '../../components/Table/styles';
 
 export const AdminPage = () => {
   const [adminEmail, setAdminEmail] = useState('');
@@ -166,7 +167,7 @@ export const AdminPage = () => {
     return response;
   };
 
-  const showAllUsers = users.map(user => {
+  const renderTableData = users.map(user => {
     const { email, uid, displayName, photoURL } = user;
     return (
       <tr key={uid}>
@@ -210,7 +211,7 @@ export const AdminPage = () => {
     hideButton
   } = loading;
 
-  console.log(messagesContactUs);
+  // console.log('users:', users, 'messages from contact:', messagesContactUs);
   return (
     <div>
       <Wrapper>
@@ -254,18 +255,7 @@ export const AdminPage = () => {
         </AddAdminForm>
         <div>
           {loadRequest ? (
-            <table className='usersTable'>
-              <tbody style={{ textAlign: 'center' }}>
-                <tr>
-                  <th>User ID</th>
-                  <th>Email</th>
-                  <th>Name</th>
-                  <th>Photo URL</th>
-                  <th>Manage</th>
-                </tr>
-                {showAllUsers}
-              </tbody>
-            </table>
+            <StyledTable state={users} children={renderTableData} />
           ) : (
             <LoadPage load={loadComponent} />
           )}
