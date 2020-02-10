@@ -1,24 +1,15 @@
 import React from 'react';
-import { StyledTable, TableBody } from './styles';
+import './style.css';
+import { StyledTable } from './styles';
 
-export const Table = ({ state, children }) => {
-  const renderTableHeading = () =>
-    Object.keys(state[0]).map((key, index) => {
-      return (
-        <thead>
-          <th key={index}>{key.toUpperCase()}</th>
-        </thead>
-      );
-    });
-
-  const daoc = renderTableHeading;
+export const Table = ({ thead, tbody }) => {
   return (
     <div>
       <StyledTable>
-        <TableBody>
-          {daoc}
-          {children}
-        </TableBody>
+        <thead>
+          <tr>{thead}</tr>
+        </thead>
+        <tbody>{tbody}</tbody>
       </StyledTable>
     </div>
   );

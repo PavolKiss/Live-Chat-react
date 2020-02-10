@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import './style.css';
 import { admin_actions } from '../../api/admin_actions';
 import * as firebase from '../../firebase/index';
 import swal from 'sweetalert';
@@ -15,7 +14,7 @@ import { ButtonClose } from '../../components/Modal/styles-modal';
 import { StyledButton } from '../../components/StyledButton';
 import { StyledInput } from '../../components/StyledInput';
 import { LoadPage } from '../LoadPage/loadpage';
-import { StyledTable } from '../../components/Table/styles';
+import { Table } from '../../components/Table/table';
 
 export const AdminPage = () => {
   const [adminEmail, setAdminEmail] = useState('');
@@ -25,6 +24,7 @@ export const AdminPage = () => {
     displayName: '',
     email: ''
   });
+  const [obj, setObj] = useState([]);
   const [messagesContactUs, setMessagesContactUs] = useState([]);
   const [loading, setLoading] = useState({
     loadRequest: false,
@@ -63,6 +63,7 @@ export const AdminPage = () => {
         loadRequest: true,
         hideButton: true
       });
+      setObj(Object.keys(users[0]));
       return response;
     } catch (error) {
       const errMessage = error;
@@ -167,14 +168,19 @@ export const AdminPage = () => {
     return response;
   };
 
+  const renderTableHeading = obj.map((key, index) => {
+    return <th key={index}>{key.toUpperCase()}</th>;
+  });
+
   const renderTableData = users.map(user => {
-    const { email, uid, displayName, photoURL } = user;
+    const { email, uid, displayName, photoURL, disabled } = user;
     return (
       <tr key={uid}>
         <td>{uid}</td>
         <td>{email}</td>
-        <td>{displayName}</td>
         <td>{photoURL}</td>
+        <td>{displayName}</td>
+        <td>{disabled.toString()}</td>
         <td>
           <ActionButton
             value={uid}
@@ -211,7 +217,7 @@ export const AdminPage = () => {
     hideButton
   } = loading;
 
-  // console.log('users:', users, 'messages from contact:', messagesContactUs);
+  console.log('messages from contact:', messagesContactUs);
   return (
     <div>
       <Wrapper>
@@ -255,7 +261,7 @@ export const AdminPage = () => {
         </AddAdminForm>
         <div>
           {loadRequest ? (
-            <StyledTable state={users} children={renderTableData} />
+            <Table thead={renderTableHeading} tbody={renderTableData} />
           ) : (
             <LoadPage load={loadComponent} />
           )}

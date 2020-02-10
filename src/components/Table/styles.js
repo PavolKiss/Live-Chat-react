@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
-export const StyledTable = styled.table``;
-
-export const TableBody = styled.tbody``;
+export const StyledTable = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+`;
