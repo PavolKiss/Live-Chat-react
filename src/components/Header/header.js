@@ -65,10 +65,11 @@ export const Header = () => {
   }, []);
 
   const linkNodes = links.map(link => {
+    const { title, onClick, to } = link;
     return (
-      <ListItem key={link.title}>
-        <StyledLink onClick={link.onClick} to={link.to}>
-          {link.title}
+      <ListItem key={title}>
+        <StyledLink onClick={onClick} to={to}>
+          {title}
         </StyledLink>
       </ListItem>
     );

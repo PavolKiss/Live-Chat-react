@@ -10,7 +10,7 @@ import {
   ActionButton
 } from './styles';
 import { Modal } from '../../components/Modal/modal';
-import { ButtonClose } from '../../components/Modal/styles-modal';
+import { ButtonClose } from '../../components/Modal/styles';
 import { StyledButton } from '../../components/StyledButton';
 import { StyledInput } from '../../components/StyledInput';
 import { LoadPage } from '../LoadPage/loadpage';
@@ -32,7 +32,7 @@ export const AdminPage = () => {
     loadUserUpdateForms: false,
     deleteUser: false,
     showAdmins: false,
-    openModal: false,
+    isClosedModal: false,
     hideButton: false
   });
 
@@ -112,7 +112,7 @@ export const AdminPage = () => {
         const response = await admin_actions('deleteUser', { uid: userID });
         setLoading({
           ...loading,
-          openModal: false
+          isClosedModal: false
         });
         const message = response.data.message;
         swal(`User with ID ${message} `, { icon: 'success' });
@@ -143,7 +143,7 @@ export const AdminPage = () => {
       });
       setLoading({
         ...loading,
-        openModal: false
+        isClosedModal: false
       });
       const message = response.data.message;
       swal({
@@ -188,7 +188,7 @@ export const AdminPage = () => {
               handleUserID(event);
               setLoading({
                 ...loading,
-                openModal: true
+                isClosedModal: true
               });
             }}></ActionButton>
         </td>
@@ -213,7 +213,7 @@ export const AdminPage = () => {
     loadRequest,
     loadUserUpdateForms,
     showAdmins,
-    openModal,
+    isClosedModal,
     hideButton
   } = loading;
 
@@ -267,13 +267,13 @@ export const AdminPage = () => {
           )}
         </div>
       </Wrapper>
-      <Modal openModal={openModal}>
+      <Modal openModal={isClosedModal}>
         Actions for user with ID: <h3>{userID}</h3>
         <ButtonClose
           onClick={() => {
             setLoading({
               ...loading,
-              openModal: false,
+              isClosedModal: false,
               loadUserUpdateForms: false
             });
           }}>

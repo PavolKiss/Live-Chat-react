@@ -10,12 +10,14 @@ import {
 import { Button } from '../../components/StyledButton/styles';
 import { StyledInput } from '../../components/StyledInput';
 import { navigate } from '@reach/router';
+import { LostPasswordPage } from '../LostPasswordPage/lostpasswordpage';
 
 export const LoginPage = () => {
   const [userCrendetials, setUserCredentials] = useState({
     email: '',
     password: ''
   });
+  const [openLostPasswordPage, setOpenLostPasswordPage] = useState(false);
 
   const handleUserCredentials = e => {
     setUserCredentials({
@@ -40,35 +42,45 @@ export const LoginPage = () => {
     }
   };
 
+  const lostPasswordPageOpen = () => {
+    // e.preventDefault();
+    setOpenLostPasswordPage(true);
+  };
+
   const { email, password } = userCrendetials;
   return (
-    <form onSubmit={signIn}>
-      <Wrapper>
-        <h1>Sign In</h1>
-        <div>
-          <StyledInput
-            type='email'
-            name='email'
-            value={email}
-            onChange={handleUserCredentials}
-            placeholder='Email'
-          />
-        </div>
-        <div>
-          <StyledInput
-            type='password'
-            name='password'
-            value={password}
-            onChange={handleUserCredentials}
-            placeholder='Password'
-          />
-          <RegisterAndLostPassWrapper>
-            <RegisterLink to='/signup'>Register now</RegisterLink>
-            <LostPasswordLink to='#'>Lost Password</LostPasswordLink>
-          </RegisterAndLostPassWrapper>
-        </div>
-        <Button>Sign In</Button>
-      </Wrapper>
-    </form>
+    <div>
+      <form onSubmit={signIn}>
+        <Wrapper>
+          <h1>Sign In</h1>
+          <div>
+            <StyledInput
+              type='email'
+              name='email'
+              value={email}
+              onChange={handleUserCredentials}
+              placeholder='Email'
+            />
+          </div>
+          <div>
+            <StyledInput
+              type='password'
+              name='password'
+              value={password}
+              onChange={handleUserCredentials}
+              placeholder='Password'
+            />
+            <RegisterAndLostPassWrapper>
+              <RegisterLink to='/signup'>Register now</RegisterLink>
+              <LostPasswordLink onClick={lostPasswordPageOpen}>
+                Lost Password
+              </LostPasswordLink>
+            </RegisterAndLostPassWrapper>
+          </div>
+          <Button>Sign In</Button>
+        </Wrapper>
+      </form>
+      <LostPasswordPage closeModal={openLostPasswordPage} />
+    </div>
   );
 };

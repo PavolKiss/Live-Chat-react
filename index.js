@@ -10,6 +10,7 @@ import { AdminPage } from './src/containers/AdminPage/adminpage';
 import { ChatPage } from './src/containers/ChatPage/chatpage';
 import { AccountPage } from './src/containers/AccountPage/accountpage';
 import { ContactUs } from './src/containers/ContactUsPage/contactUs';
+import { LostPasswordPage } from './src/containers/LostPasswordPage/lostpasswordpage';
 
 const App = () => {
   return (
@@ -23,6 +24,7 @@ const App = () => {
         <AdminPage path='adminpanel' />
         <AccountPage path='account' />
         <ContactUs path='contact' />
+        <LostPasswordPage path='lostpassword' />
       </Router>
     </div>
   );

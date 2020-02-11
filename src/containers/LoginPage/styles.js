@@ -25,9 +25,9 @@ export const RegisterLink = styled(Link)`
   }
 `;
 
-export const LostPasswordLink = styled(Link)`
-  text-decoration: none;
+export const LostPasswordLink = styled.div`
   color: black;
+  cursor: pointer;
   transition: 0.3s;
   &:hover {
     color: ${variable.darkBlue};

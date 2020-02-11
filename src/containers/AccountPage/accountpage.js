@@ -16,7 +16,7 @@ import {
 import { StyledInput } from '../../components/StyledInput';
 import { StyledButton } from '../../components/StyledButton';
 import { Modal } from '../../components/Modal/modal';
-import { ButtonClose } from '../../components/Modal/styles-modal';
+import { ButtonClose } from '../../components/Modal/styles';
 
 export const AccountPage = () => {
   const [userCredentials, setUserCredentials] = useState({
@@ -169,8 +169,7 @@ export const AccountPage = () => {
               <button
                 onClick={handleUpload}
                 hidden={disabled}
-                disabled={disabled}
-              >
+                disabled={disabled}>
                 Save img
               </button>
             </StyledLabel>

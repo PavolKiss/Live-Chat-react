@@ -1,5 +1,5 @@
 import React from 'react';
-import { OverlayWrapper, ModalWrapper, ContentWrapper } from './styles-modal';
+import { OverlayWrapper, ModalWrapper, ContentWrapper } from './styles';
 
 export const Modal = ({ children, openModal }) => {
   return (
